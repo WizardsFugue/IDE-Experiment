@@ -1,0 +1,12 @@
+{
+    "require": {
+        "react/react": "0.4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cotya\\IDE\\Frontend\\": "src/Frontend/"
+        }
+    }
+
+
+}
