@@ -47,6 +47,13 @@
             scope.config = angular.extend(config, scope.config); // merge scope config with the rest of the config
             scope.disableSelect = false;
 
+            if(typeof scope.tree === 'undefined'){
+              scope.tree = {};
+            }
+            if(typeof scope.tree._activeFiles === 'undefined'){
+              scope.tree._activeFiles = {};
+            }
+            
             if (scope.config.multiSelect) {
               scope.tree._selectedFiles = {};
             } else {
@@ -106,6 +113,9 @@
            */
           var activate = function(file) {
             file._active = true;
+            if(typeof scope.tree._activeFiles === 'undefined'){
+              scope.tree._activeFiles = {};
+            }
             scope.tree._activeFiles[file[scope.config.idField]] = file;
 
             if (file._parent) {
