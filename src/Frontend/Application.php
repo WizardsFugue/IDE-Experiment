@@ -51,9 +51,6 @@ class Application
             case ('/ide'===$request->getPath()):
                 $this->handleIdeRequest($response);
                 break;
-            case ('/ide/filetree'===$request->getPath()):
-                $this->outputFileTree($response);
-                break;
             case ('/editor'===$request->getPath()):
                 $this->editorRequest($request, $response);
                 break;
@@ -174,50 +171,6 @@ HTML;
         }else{
             $this->notFound($response);
         }
-    }
-    
-    protected function outputFileTree(Response $response)
-    {
-        $dir = new \RecursiveDirectoryIterator($this->workspace, \FilesystemIterator::SKIP_DOTS);
-        $pathPrefix = $this->workspace;
-        $filterPath = function($path) use ($pathPrefix) {
-            return preg_replace('/^' . preg_quote($pathPrefix, '/') . '/', '', $path);
-        };
-        $getDirContent = function(\RecursiveDirectoryIterator $directory) use (&$getDirContent, $filterPath) {
-            $result = [];
-            foreach ($directory as $fileinfo) {
-                if ($fileinfo->isDir()) {
-                    $result[] = [
-                        'id'   => $filterPath($fileinfo->getRealPath()),
-                        'name' => $fileinfo->getFilename(),
-                        'type' => 'folder',
-                        'children' => $getDirContent(
-                            new \RecursiveDirectoryIterator($fileinfo, \FilesystemIterator::SKIP_DOTS)
-                            
-                        )
-                    ];
-                }
-                if ($fileinfo->isFile()) {
-                    $result[] = [
-                        'id'   => $filterPath($fileinfo->getRealPath()),
-                        'name' => $fileinfo->getFilename(),
-                        'type' => 'file',
-                    ];
-                }
-            }
-            return $result;
-        };
-        
-        $result = [
-            'id'=> 'root',
-            'name'=> 'Root',
-            'type'=> 'folder',
-            'children' => $getDirContent($dir),
-        ];
-
-        $headers = array('Content-Type' => 'text/json');
-        $response->writeHead(200, $headers);
-        $response->end(json_encode($result));
     }
     
     protected function notFound( Response $response )
