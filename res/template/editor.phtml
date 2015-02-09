@@ -1,0 +1,96 @@
+<html ng-app="cotyaIDE">
+<head>
+
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
+    <script src="/js/app.js"></script>
+
+    <script src="/vendor/ez-file-tree.js"></script>
+    <script src="/vendor/ez-file-tree.tpl.js"></script>
+    <script src="/vendor/ez-object2array.min.js"></script>
+    
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <link href="/vendor/ez-file-tree.min.css" rel="stylesheet">
+
+    <link href="/style/base.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="container" >
+    <header>
+        <h1>Cotya IDE</h1>
+    </header>
+    <section id="nav" class="sidebar" role="navigation">
+        <nav>
+
+            <ul>
+                <li ng-repeat="tab in tabs"
+                    ng-class="{active:isActiveTab(tab.url)}"
+                    ng-click="onClickTab(tab)">{{tab.title}}</li>
+            </ul>
+        </nav>
+        <div ng-controller="FileTreeController">
+            <div ez-file-tree="folders" 
+                 data-folder-selection="false"
+                 data-file-selection="false"
+                ></div>
+        </div>
+    </section>
+    <section id="main" role="main">
+        <div ng-include="currentTab"></div>
+    </section>
+    <script type="text/ng-template" id="overview.tpl.html">
+        <div ng-controller="OverviewCtrl" id="overview">
+            <h2>{{project.name}}</h2>
+            <div>
+                <span>all used licenses:</span>
+                <div>
+                    <span ng-repeat="license in usedLicenses">{{license}}{{$last ? '' : ', '}}</span>
+                </div>
+                <br/><br/>
+                <span>validation result(errors):</span>
+                <ul>
+                    <li ng-repeat="message in project.validationResult.info" style="background-color:greenyellow;">{{message}}</li>
+                    <li ng-repeat="message in project.validationResult.warnings" style="background-color:orange;">{{message}}</li>
+                    <li ng-repeat="message in project.validationResult.publishErrors" style="background-color:orangered;">{{message}}</li>
+                    <li ng-repeat="message in project.validationResult.errors" style="background-color:red;">{{message}}</li>
+                </ul>
+            </div>
+            <table>
+                <thead>
+                <tr>
+                    <th ng-click="packagesOrder = 'prettyName'">Name</th>
+                    <th ng-click="packagesOrder = 'prettyVersion'">Version</th>
+                    <th ng-click="packagesOrder = 'license'">License</th>
+                    <th ng-click="packagesOrder = 'releaseDate.date'">release Date</th>
+                </tr>
+                </thead>
+                <tr ng-repeat="package in packages | orderBy:packagesOrder">
+                    <td>{{package.prettyName}}</td>
+                    <td>{{package.prettyVersion}}</td>
+                    <td>{{package.license}}</td>
+                    <td>{{package.releaseDate.date}}</td>
+                </tr>
+            </table>
+        </div>
+    </script>
+    <script type="text/ng-template" id="composer_json.tpl.html">
+        <div ng-controller="ComposerJsonCtrl">
+            <span>loaded from: <code>{{filepath}}</code></span>
+            <pre>{{file}}</pre>
+        </div>
+    </script>
+    <footer>
+
+        <div ng-controller="StatsController">
+            <pre>
+                memory usage: {{stats.memoryusage}}
+            </pre>
+        </div>
+        
+    </footer>
+</div>
+</body>
+</html>

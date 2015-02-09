@@ -1,0 +1,18 @@
+
+body{
+    
+}
+
+section.sidebar {
+    float: left;
+    margin: 0 15px 15px 0;
+}
+section#main {
+    display: inline-block;
+}
+footer {
+    clear: both;
+    padding: 1px;
+}
+    
+
