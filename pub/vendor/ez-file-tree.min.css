@@ -1,0 +1,50 @@
+.ez-file-tree ul {
+  list-style: none;
+  padding: 0 0 0 18px;
+  margin: 0;
+}
+.ez-file-tree i {
+  margin: 0;
+}
+.ez-file-tree .icon-container {
+  width: 14px;
+  text-align: center;
+  display: inline-block;
+}
+.ez-file-tree input[type="checkbox"] {
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+  margin: 0;
+  height: 14px;
+}
+.ez-file-tree li {
+  text-align: left;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.ez-file-tree .folder-toggle {
+  width: 14px;
+  display: inline-block;
+}
+.ez-file-tree .folder-toggle i:hover {
+  color: #ccc;
+}
+.ez-file-tree .file-name {
+  display: inline-block;
+  vertical-align: middle;
+}
+.ez-file-tree label {
+  cursor: pointer;
+  font-weight: normal;
+  min-width: 120px;
+}
+.ez-file-tree:not(.checking-enabled) label {
+  padding: 0 5px;
+}
+.ez-file-tree:not(.checking-enabled) .label-container.selected label {
+  background-color: #006dcc;
+  color: #fff;
+}
