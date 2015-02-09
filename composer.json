@@ -1,6 +1,7 @@
 {
     "require": {
-        "react/react": "0.4.*"
+        "react/react": "0.4.*",
+        "silex/silex": "~1.2"
     },
     "autoload": {
         "psr-4": {

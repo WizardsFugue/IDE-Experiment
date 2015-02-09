@@ -8,8 +8,10 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
+$silexApp = new Silex\Application();
 
 $app = new \Cotya\IDE\Frontend\Application(
+    $silexApp,
     __DIR__.'/pub',
     __DIR__.'/sandbox/workspace'
 );

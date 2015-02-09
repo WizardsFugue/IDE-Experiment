@@ -10,15 +10,20 @@ namespace Cotya\IDE\Frontend;
 
 use \React\Http\Request;
 use \React\Http\Response;
+use Symfony\Component\HttpFoundation\Request as SilexRequest;
+use Symfony\Component\HttpFoundation\Response as SilexResponse;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class Application
 {
     protected $publicDir;
     protected $workspace;
+    protected $silexApp;
     protected $i = 0;
     
-    public function __construct($publicDir, $workspace)
+    public function __construct(\Silex\Application $silexApp, $publicDir, $workspace)
     {
+        $this->silexApp = $silexApp;
         $this->publicDir = $publicDir;
         $this->workspace = $workspace;
         echo "server started".PHP_EOL;
@@ -60,8 +65,19 @@ class Application
                 $this->handleFavicon($request,$response);
                 break;
             default:
-                $this->notFound($response);
+                $subRequest = SilexRequest::create($request->getPath(), $request->getMethod());
+                $silexResponse = $this->silexApp->handle($subRequest);
+                $this->outputSilexResponse($silexResponse, $response);
+                //$this->notFound($response);
         }
+    }
+    
+    protected function outputSilexResponse(SilexResponse $silexResponse, Response $response)
+    {
+        
+        $headers = array('Content-Type' => $silexResponse->headers->get('Content-Type'));
+        $response->writeHead($silexResponse->getStatusCode(), $headers);
+        $response->end($silexResponse->getContent());
     }
     
     
