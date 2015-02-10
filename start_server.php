@@ -32,5 +32,8 @@ $http->on('request', function ($request, $response) use ($application){
     $application->onRequest($request, $response);
 });
 
-$socket->listen(8083);
+$port = 8083;
+
+$socket->listen($port);
+echo "start server on 127.0.0.1:$port";
 $loop->run();
