@@ -32,6 +32,7 @@
             </ul>
         </nav>
         <div ng-controller="FileTreeController">
+            <button ng-click="refresh()">refresh</button>
             <div ez-file-tree="folders" 
                  data-folder-selection="false"
                  data-file-selection="false"

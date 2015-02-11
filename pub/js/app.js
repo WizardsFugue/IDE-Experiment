@@ -64,6 +64,7 @@ cotyaIDE.controller('FileTreeController', function($scope,$http) {
             $scope.folders  = data;
         });
     };
+    $scope.refresh = refresh;
     refresh();
     
 });
