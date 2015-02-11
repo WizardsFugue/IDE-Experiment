@@ -46,17 +46,19 @@ cotyaIDE.controller('StatsController', function ($scope, $http) {
     setInterval(refresh , 10000);
 });
 
-cotyaIDE.controller('FileTreeController', function($scope,$http) {
+cotyaIDE.controller('FileTreeController', function($scope,$http,$rootScope) {
 
     //$scope.tree = {};
     //$scope.tree._activeFiles = {};
 
+    $scope.$rootScope = $rootScope;
 
     $scope.toggle = function (event, data) {
         console.log(event,data);
     };
     $scope.$on('ez-file-tree.select', function(e, data) {
         console.log('file checked' + data.id);
+        e.currentScope.$rootScope.openFile(data.id);
     });
 
     var refresh = function(){
@@ -69,6 +71,31 @@ cotyaIDE.controller('FileTreeController', function($scope,$http) {
     
 });
 
+cotyaIDE.controller('EditorController', function($scope,$http,$rootScope) {
+
+    var editor = ace.edit("editor");
+    
+    var openFile;
+    
+    $rootScope.openFile = function(filepath){
+        console.log('open file:'+filepath);
+
+        $http.get('ide/file',{ params: {file: filepath} }).success(function(data) {
+            openFile = filepath;
+            editor.getSession().setMode("ace/mode/php");
+            editor.setValue(data);
+            editor.gotoLine(0);
+        });
+    };
+    
+    $scope.save = function(){
+        $http.post('ide/file', {
+            file: openFile,
+            content: editor.getValue()
+        });
+    };
+    
+});
 
 cotyaIDE.filter('stringify', function() {
     function getSerialize (fn, decycle) {

@@ -62,9 +62,26 @@ class Application
                 $this->handleFavicon($request,$response);
                 break;
             default:
-                $subRequest = SilexRequest::create($request->getPath(), $request->getMethod());
-                $silexResponse = $this->silexApp->handle($subRequest);
-                $this->outputSilexResponse($silexResponse, $response);
+                if ($request->getMethod() === 'GET') {
+                    $subRequest = SilexRequest::create(
+                        $request->getPath(),
+                        $request->getMethod(),
+                        $request->getQuery()
+                    );
+                    $silexResponse = $this->silexApp->handle($subRequest);
+                    $this->outputSilexResponse($silexResponse, $response);
+                } elseif ($request->getMethod() === 'POST') {
+                    $request->on('data', function($data) use ($request, $response) {
+                        $data = json_decode($data, true);
+                        $subRequest = SilexRequest::create(
+                            $request->getPath(),
+                            $request->getMethod(),
+                            $data
+                        );
+                        $silexResponse = $this->silexApp->handle($subRequest);
+                        $this->outputSilexResponse($silexResponse, $response);
+                    });
+                }
                 //$this->notFound($response);
         }
     }

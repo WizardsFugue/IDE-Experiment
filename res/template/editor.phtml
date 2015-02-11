@@ -8,7 +8,10 @@
     <script src="/vendor/ez-file-tree.js"></script>
     <script src="/vendor/ez-file-tree.tpl.js"></script>
     <script src="/vendor/ez-object2array.min.js"></script>
-    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/mode-php.js" type="text/javascript" charset="utf-8"></script>
+
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
@@ -41,6 +44,10 @@
     </section>
     <section id="main" role="main">
         <div ng-include="currentTab"></div>
+        <div ng-controller="EditorController">
+            <button ng-click="save()">save</button>
+            <div id="editor" style="height: 800px;width: 600px;"></div>
+        </div>
     </section>
     <script type="text/ng-template" id="overview.tpl.html">
         <div ng-controller="OverviewCtrl" id="overview">
