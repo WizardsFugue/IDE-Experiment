@@ -80,14 +80,16 @@ cotyaIDE.controller('EditorController', function($scope,$http,$element,$rootScop
     var openFileContent;
     
     var editorSaveButton = $element.children()[0];
-
-    editor.on("change", function(e){
+    
+    var updateSaveButton = function(){
         if($scope.fileNeedsSave()){
             angular.element(editorSaveButton).addClass('dirty');
         }else{
             angular.element(editorSaveButton).removeClass('dirty');
         }
-    });
+    };
+
+    editor.on("change", updateSaveButton);
     
     $rootScope.openFile = function(filepath){
         console.log('open file:'+filepath);
@@ -108,6 +110,7 @@ cotyaIDE.controller('EditorController', function($scope,$http,$element,$rootScop
             content: editor.getValue()
         });
         openFileContent = editor.getValue();
+        updateSaveButton();
     };
     
     $scope.fileNeedsSave = function(){
@@ -119,6 +122,19 @@ cotyaIDE.controller('EditorController', function($scope,$http,$element,$rootScop
         }
         return result;
     };
+
+    document.onkeydown = function (e){
+        if(
+            //e.keyCode == 'S'.charCodeAt(0)
+            e.which == '83'
+            && (e.ctrlKey || e.metaKey)
+        ){
+            $scope.save();
+            e.preventDefault();
+            return false;
+        }
+    }
+    
     
 });
 
