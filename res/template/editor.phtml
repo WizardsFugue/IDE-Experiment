@@ -44,8 +44,10 @@
     </section>
     <section id="main" role="main">
         <div ng-include="currentTab"></div>
-        <div ng-controller="EditorController">
-            <button ng-click="save()">save</button>
+        <div id="editor-container" ng-controller="EditorController">
+            <button ng-click="save()" 
+                    class="button-save"
+                >save</button>
             <div id="editor" style="height: 800px;width: 600px;"></div>
         </div>
     </section>

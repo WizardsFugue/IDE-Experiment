@@ -16,3 +16,7 @@ footer {
 }
     
 
+#editor-container .button-save.dirty{
+    background-color: indianred;
+}
+

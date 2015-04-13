@@ -71,20 +71,34 @@ cotyaIDE.controller('FileTreeController', function($scope,$http,$rootScope) {
     
 });
 
-cotyaIDE.controller('EditorController', function($scope,$http,$rootScope) {
+cotyaIDE.controller('EditorController', function($scope,$http,$element,$rootScope) {
 
     var editor = ace.edit("editor");
+    editor.setReadOnly(1);
     
     var openFile;
+    var openFileContent;
+    
+    var editorSaveButton = $element.children()[0];
+
+    editor.on("change", function(e){
+        if($scope.fileNeedsSave()){
+            angular.element(editorSaveButton).addClass('dirty');
+        }else{
+            angular.element(editorSaveButton).removeClass('dirty');
+        }
+    });
     
     $rootScope.openFile = function(filepath){
         console.log('open file:'+filepath);
 
         $http.get('ide/file',{ params: {file: filepath} }).success(function(data) {
             openFile = filepath;
+            openFileContent = data;
             editor.getSession().setMode("ace/mode/php");
             editor.setValue(data);
             editor.gotoLine(0);
+            editor.setReadOnly(0);
         });
     };
     
@@ -93,6 +107,17 @@ cotyaIDE.controller('EditorController', function($scope,$http,$rootScope) {
             file: openFile,
             content: editor.getValue()
         });
+        openFileContent = editor.getValue();
+    };
+    
+    $scope.fileNeedsSave = function(){
+        var result = false;
+        if(editor.getValue() && openFileContent){
+            result = editor.getValue().trim()!=openFileContent.trim();
+        }else{
+            result = false;
+        }
+        return result;
     };
     
 });
